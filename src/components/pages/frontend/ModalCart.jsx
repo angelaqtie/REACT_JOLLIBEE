@@ -12,6 +12,9 @@ import {
 } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Processing from "./Processing";
+import Payment from "./Payment";
+import Dining from "./Dining";
 
 const ModalCart = ({ setShowCart, cartData, setCartData, getTotal }) => {
   const [option, setOption] = React.useState("cart");
@@ -135,98 +138,15 @@ const ModalCart = ({ setShowCart, cartData, setCartData, getTotal }) => {
             )}
           </div>
         ) : option === "dining" ? (
-          <div className="max-w-[600px] w-full bg-white rounded-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
-            <div className="modal-header p-4 flex justify-between items-center border-b border-gray-200">
-              <button onClick={() => setOption("cart")}>
-                <ArrowLeft />
-              </button>
-              <h5 className="mb-0">Choose One</h5>
-              <button>
-                <X />
-              </button>
-            </div>
-
-            <div className="madal-main h-[60vh] w-full flex justify-center items-center">
-              <div className="flex flex-col items-center">
-                <img
-                  src={`${imgPath}/jollibee-logo.png`}
-                  alt=""
-                  className="mx-auto mb-5 w-[90px]"
-                />
-
-                <p className="text-2xl mb-5 font-bold">
-                  Select preferred dining option
-                </p>
-                <button
-                  className="bg-primary px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
-                  onClick={() => setOption("payment")}
-                >
-                  <Utensils /> Dine In
-                </button>
-                <h3 className="my-3">or</h3>
-                <button
-                  className="bg-primary px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md "
-                  onClick={() => setOption("payment")}
-                >
-                  <ShoppingBag /> Take Out
-                </button>
-              </div>
-            </div>
-          </div>
+          <Dining setOption={setOption} setShowCart={setShowCart} />
         ) : option === "payment" ? (
-          <div className="max-w-[600px] w-full bg-white rounded-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
-            <div className="modal-header p-4 flex justify-between items-center border-b border-gray-200">
-              <button onClick={() => setOption("dining")}>
-                <ArrowLeft />
-              </button>
-              <h5 className="mb-0">Choose One</h5>
-              <button>
-                <X />
-              </button>
-            </div>
-
-            <div className="madal-main h-[60vh] w-full flex justify-center items-center">
-              <div className="flex flex-col items-center">
-                <img
-                  src={`${imgPath}/jollibee-logo.png`}
-                  alt=""
-                  className="mx-auto mb-5 w-[90px]"
-                />
-
-                <p className="text-2xl mb-5 font-bold">
-                  Select preferred payment option
-                </p>
-                <button
-                  className="bg-primary px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
-                  onClick={handleProcessing}
-                >
-                  <PhilippinePeso />
-                  Counter Payment
-                </button>
-                <h3 className="my-3">or</h3>
-                <button
-                  className="bg-primary px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
-                  onClick={handleProcessing}
-                >
-                  <CreditCard /> Card / Online Payment
-                </button>
-              </div>
-            </div>
-          </div>
+          <Payment
+            handleProcessing={handleProcessing}
+            setOption={setOption}
+            setShowCart={setShowCart}
+          />
         ) : (
-          <div className="max-w-[600px] w-full bg-white rounded-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
-            <div className="madal-main h-[60vh] w-full flex justify-center items-center">
-              <div className="flex flex-col items-center">
-                <img
-                  src={`${imgPath}/jollibee-logo.png`}
-                  alt=""
-                  className="mx-auto mb-5 w-[90px]"
-                />
-
-                <h2>Processing Order. Please wait...</h2>
-              </div>
-            </div>
-          </div>
+          <Processing />
         )}
       </div>
     </>
