@@ -1,11 +1,11 @@
 import { imgPath } from "@/components/helpers/functions-general";
 import React from "react";
 
-const SideNav = () => {
+const SideNav = ({ setCategory }) => {
   const menus = [
     {
       img: "nav-chickenjoy.webp",
-      title: "Chicken Joy",
+      title: "Chickenjoy",
     },
     {
       img: "nav-value-meal.webp",
@@ -36,13 +36,18 @@ const SideNav = () => {
       title: "Desserts",
     },
   ];
+
+  const handleGetCategory = (category) => {
+    setCategory(category);
+  };
+
   return (
     <>
       <h5 className="mb-0 text-center pt-2">Menu</h5>
       <ul className="text-center">
         {menus.map((item, key) => (
-          <li className="mb-3">
-            <button>
+          <li className="mb-3" key={key}>
+            <button onClick={() => handleGetCategory(item.title)}>
               <img src={`${imgPath}/${item.img}`} />
             </button>
             <small className="text-xs">{item.title}</small>
