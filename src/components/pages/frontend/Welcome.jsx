@@ -17,7 +17,7 @@ const Welcome = () => {
         />
 
         <div className=" text-white absolute w-full bottom-0 left-0">
-          <div className=" bg-primary text-white text-center p-4">
+          <div className=" bg-myred text-white text-center p-4">
             <Link
               to="/order"
               className="text-4xl font-bold flex gap-5 justify-center items-center"
@@ -34,8 +34,8 @@ const Welcome = () => {
               </h4>
             </div>
 
-            <div className="pl-4 border-l-4 border-primary basis-[300px]">
-              <h5 className="text-primary mb-1">For other payments</h5>
+            <div className="pl-4 border-l-4 border-myred basis-[300px]">
+              <h5 className="text-myred mb-1">For other payments</h5>
               <p className="text-xs text-black opacity-60">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum
                 eligendi eius reprehenderit 

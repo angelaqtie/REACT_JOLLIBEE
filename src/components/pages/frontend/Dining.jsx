@@ -27,14 +27,14 @@ const Dining = ({ setOption, setShowCart }) => {
             Select preferred dining option
           </p>
           <button
-            className="bg-primary px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
+            className="bg-myred px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
             onClick={() => setOption("payment")}
           >
             <Utensils /> Dine In
           </button>
           <h3 className="my-3">or</h3>
           <button
-            className="bg-primary px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md "
+            className="bg-myred px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md "
             onClick={() => setOption("payment")}
           >
             <ShoppingBag /> Take Out
