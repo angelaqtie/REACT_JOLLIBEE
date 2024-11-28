@@ -2,6 +2,9 @@ import { imgPath } from "@/components/helpers/functions-general";
 import { CheckCircle2, Eye, EyeClosed, EyeOff, MailCheck } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
+import * as Yup from "Yup";
+import { InputText } from "@/components/helpers/FormInputs,";
+import { Form, Formik } from "formik";
 
 const ForgotPassword = () => {
   const [theme, setTheme] = React.useState(localStorage.getItem("theme"));
@@ -18,6 +21,13 @@ const ForgotPassword = () => {
     setThemeColor();
   }, [theme]);
 
+  const initVal = {
+    user_email: "",
+  };
+  const yupSchema = Yup.object({
+    user_email: Yup.string().required("Required").email("Invalid email"),
+  });
+
   return (
     <main className="h-screen bg-primary center-all">
       <div className="login-main bg-secondary max-w-[320px] w-full p-4 border border-line rounded-md">
@@ -28,7 +38,7 @@ const ForgotPassword = () => {
         />
         {success ? (
           <div className="success-message mt-5">
-            <MailCheck size={50} stroke={"green"} className="mx-auto" />
+            <MailCheck size={50} stroke={"gray"} className="mx-auto" />
             <p className="my-5 text-center">
               We have sent the instruction on how to reset your password
             </p>
@@ -46,25 +56,41 @@ const ForgotPassword = () => {
               Enter your registered email to reset your password
             </p>
 
-            <form action="">
-              <div className="input-wrap">
-                <label htmlFor="">Email</label>
-                <input type="text" className="!py-2" />
-              </div>
+            <Formik
+              initialValues={initVal}
+              validationSchema={yupSchema}
+              onSubmit={async (values) => {
+                console.log(values);
+              }}
+            >
+              {(props) => {
+                return (
+                  <Form>
+                    <div className="input-wrap">
+                      <InputText
+                        label="Email"
+                        type="email"
+                        className="!py-2"
+                        name="user_email"
+                      />
+                    </div>
 
-              <button
-                className="btn btn-accent w-full center-all mt-5"
-                onClick={() => setsuccess(true)}
-              >
-                Reset Password
-              </button>
-              <Link
-                to="/amdin/login"
-                className="text-sm text-center block mt-5 hover:text-accent"
-              >
-                Go Back to Login
-              </Link>
-            </form>
+                    <button
+                      className="btn btn-accent w-full center-all mt-5"
+                      onClick={() => setsuccess(true)}
+                    >
+                      Reset Password
+                    </button>
+                    <Link
+                      to="/admin/login"
+                      className="text-sm text-center block mt-5 hover:text-accent"
+                    >
+                      Go Back to Login
+                    </Link>
+                  </Form>
+                );
+              }}
+            </Formik>
           </div>
         )}
       </div>
