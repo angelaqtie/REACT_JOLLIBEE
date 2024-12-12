@@ -3,12 +3,39 @@ import React from "react";
 import ModalWrapper from "./ModalWrapper";
 import { setIsConfirm } from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryData } from "@/components/helpers/queryData";
 
-const ModalConfirm = () => {
+const ModalConfirm = ({ setIsConfirm, mysqlEndpoint, queryKey, item }) => {
   const { dispatch } = React.useContext(StoreContext);
 
   const handleClose = () => {
     dispatch(setIsConfirm(false));
+  };
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (values) => queryData(mysqlEndpoint, "put", values),
+    onSuccess: (data) => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      // dispatch(setIsDelete(false));
+
+      if (!data.success) {
+        console.log("May error!");
+      } else {
+        dispatch(setIsConfirm(false));
+        console.log("Naysuu!");
+      }
+    },
+  });
+
+  const handleYes = async () => {
+    // mutate data
+    mutation.mutate({
+      isActive: 0,
+    });
   };
 
   return (
@@ -24,11 +51,13 @@ const ModalConfirm = () => {
           </div>
           <div className="modal-body p-2 py-4">
             <p className="mb-0 text-center">
-              Are you sure you want to archive this movie?
+              Are you sure you want to this archive category? {item}
             </p>
 
             <div className="flex justify-end gap-3 mt-5">
-              <button className="btn btn-warning">Archive</button>
+              <button className="btn btn-warning" onClick={handleYes}>
+                Archive
+              </button>
               <button className="btn btn-cancel" onClick={handleClose}>
                 Cancel
               </button>

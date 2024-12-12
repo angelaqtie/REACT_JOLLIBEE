@@ -8,6 +8,9 @@ import { StoreContext } from "@/components/store/storeContext";
 import { setIsAdd } from "@/components/store/storeAction";
 import FoodsTable from "./FoodsTable";
 import ModalAddFood from "./ModalAddFood";
+import ToastSuccess from "../partials/ToastSuccess";
+import ModalError from "../partials/modals/ModalError";
+import ModalValidation from "../partials/modals/ModalValidation";
 
 const Food = () => {
   const { dispatch, store } = React.useContext(StoreContext);
@@ -33,16 +36,16 @@ const Food = () => {
                 </button>
               </div>
 
-              <FoodsTable setItemEdit={setItemEdit} />
+              <FoodsTable setItemEdit={setItemEdit} itemEdit={itemEdit} />
             </div>
 
             <Footer />
           </main>
         </div>
       </section>
-      {store.validate && <ModalValidatioN />}
-      {store.error && <ModalErroR />}
-      {store.success && <ToastSuccesS />}
+      {store.validate && <ModalValidation />}
+      {store.error && <ModalError />}
+      {store.success && <ToastSuccess />}
       {store.isAdd && <ModalAddFood itemEdit={itemEdit} />}
     </>
   );

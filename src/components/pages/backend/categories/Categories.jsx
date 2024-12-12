@@ -8,12 +8,17 @@ import { StoreContext } from "@/components/store/storeContext";
 import { setIsAdd } from "@/components/store/storeAction";
 import CategoriesTable from "./CategoriesTable";
 import ModalCategories from "./ModalCategories";
+import ToastSuccess from "../partials/ToastSuccess";
+import ModalError from "../partials/modals/ModalError";
+import ModalValidation from "../partials/modals/ModalValidation";
 
 const Categories = () => {
   const { dispatch, store } = React.useContext(StoreContext);
+  const [isCategoryEdit, setIsCategoryEdit] = React.useState(null);
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
+    setIsCategoryEdit(null);
   };
 
   return (
@@ -31,17 +36,25 @@ const Categories = () => {
                 </button>
               </div>
 
-              <CategoriesTable />
+              <CategoriesTable
+                isCategoryEdit={isCategoryEdit}
+                setIsCategoryEdit={setIsCategoryEdit}
+              />
             </div>
 
             <Footer />
           </main>
         </div>
       </section>
-      {store.validate && <ModalValidatioN />}
-      {store.error && <ModalErroR />}
-      {store.success && <ToastSuccesS />}
-      {store.isAdd && <ModalCategories />}
+      {store.validate && <ModalValidation />}
+      {store.error && <ModalError />}
+      {store.success && <ToastSuccess />}
+      {store.isAdd && (
+        <ModalCategories
+          isCategoryEdit={isCategoryEdit}
+          setIsCategoryEdit={setIsCategoryEdit}
+        />
+      )}
     </>
   );
 };

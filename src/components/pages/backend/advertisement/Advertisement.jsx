@@ -8,6 +8,9 @@ import AdvertisementTable from "./AdvertisementTable";
 import { StoreContext } from "@/components/store/storeContext";
 import ModalAdvertisement from "./ModalAdvertisement";
 import { setIsAdd } from "@/components/store/storeAction";
+import ModalValidation from "../partials/modals/ModalValidation";
+import ModalError from "../partials/modals/ModalError";
+import ToastSuccess from "../partials/ToastSuccess";
 
 const Advertisement = () => {
   const { dispatch, store } = React.useContext(StoreContext);
@@ -41,9 +44,9 @@ const Advertisement = () => {
           </main>
         </div>
       </section>
-      {store.validate && <ModalValidatioN />}
-      {store.error && <ModalErroR />}
-      {store.success && <ToastSuccesS />}
+      {store.validate && <ModalValidation />}
+      {store.error && <ModalError />}
+      {store.success && <ToastSuccess />}
       {store.isAdd && <ModalAdvertisement />}
     </>
   );
