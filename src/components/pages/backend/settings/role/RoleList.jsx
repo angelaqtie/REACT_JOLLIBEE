@@ -1,101 +1,118 @@
-import { Archive, ArchiveRestore, FilePenLine, Trash2 } from "lucide-react";
-import React from "react";
-import Pills from "../partials/Pills";
-import IconServerError from "../partials/IconServerError";
-import LoadMore from "../partials/LoadMore";
-import SpinnerTable from "../partials/spinners/SpinnerTable";
-import TableLoader from "../partials/TableLoader";
-import IconNoData from "../partials/IconNoData";
+import useQueryData from "@/components/custom-hook/useQueryData";
 import { StoreContext } from "@/components/store/storeContext";
+import React, { isValidElement } from "react";
+import ModalConfirm from "../../partials/modals/ModalConfirm";
+import ModalRestore from "@/components/partials/modal/ModalRestore";
+import ModalArchive from "@/components/partials/modal/ModalArchive";
+import ModalDelete from "../../partials/modals/ModalDelete";
+import LoadMore from "../../partials/LoadMore";
+import { Archive, ArchiveRestore, FilePenLine, Trash2 } from "lucide-react";
 import {
   setIsAdd,
   setIsArchive,
-  setIsConfirm,
   setIsDelete,
   setIsRestore,
 } from "@/components/store/storeAction";
-import ModalDelete from "../partials/modals/ModalDelete";
-import ModalConfirm from "../partials/modals/ModalConfirm";
-import useQueryData from "@/components/custom-hook/useQueryData";
-import ModalArchive from "@/components/partials/modal/ModalArchive";
-import ModalRestore from "@/components/partials/modal/ModalRestore";
+import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
+import IconNoData from "../../partials/IconNoData";
+import IconServerError from "../../partials/IconServerError";
+import SpinnerTable from "../../partials/spinners/SpinnerTable";
+import TableLoader from "../../partials/TableLoader";
+import Pills from "../../partials/Pills";
+import Status from "@/components/partials/Status";
 
-const CategoriesTable = ({ setIsCategoryEdit }) => {
-  const { store, dispatch } = React.useContext(StoreContext);
+const RoleList = ({ setItemEdit }) => {
+  const { dispatch, store } = React.useContext(StoreContext);
+
   const [id, setIsId] = React.useState("");
+  const [dataItem, setIsDataItem] = React.useState(null);
 
   let counter = 1;
 
   const handleEdit = (item) => {
     dispatch(setIsAdd(true));
-    setIsCategoryEdit(item);
+    setItemEdit(item);
   };
   const handleDelete = (item) => {
     dispatch(setIsDelete(true));
-    setIsId(item.category_aid);
-  };
-  const handleRestore = (item) => {
-    dispatch(setIsRestore(true));
-    setIsId(item.category_aid);
+    setIsId(item.role_aid);
+    setIsDataItem(item);
   };
   const handleArchive = (item) => {
     dispatch(setIsArchive(true));
-    setIsId(item.category_aid);
+    setIsId(item.role_aid);
+  };
+  const handleRestore = (item) => {
+    dispatch(setIsRestore(true));
+    setIsId(item.role_aid);
   };
 
   const {
+    isLoading,
     isFetching,
     error,
     data: result,
     status,
   } = useQueryData(
-    `/v2/category`, //endpoint
+    `/v2/role`, //endpoint
     "get", //method
-    "category" //key
+    "role" //key
   );
-
   return (
     <>
       <div className="p-4 bg-secondary mt-10 rounded-md border border-line relative">
-        {/* <SpinnerTable /> */}
+        {isFetching && !isLoading && <SpinnerTable />}
         <div className="table-wrapper custom-scroll">
-          {/* <TableLoader count={20} cols={4} /> */}
           <table>
             <thead>
               <tr>
                 <th>#</th>
                 <th>Status</th>
-                <th className="w-[50%]">Title</th>
+                <th className="w-[50%]">Role Name</th>
+                <th>Description</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {/* <tr>
-              <td colSpan={100}>
-                <IconNoData />
-              </td>
-            </tr> */}
+              {isLoading && (
+                <tr>
+                  <td colSpan="100%">
+                    <TableLoader count={20} cols={4} />
+                  </td>
+                </tr>
+              )}
+              {result?.count === 0 && (
+                <tr>
+                  <td colSpan={100}>
+                    <IconNoData />
+                  </td>
+                </tr>
+              )}
+              {error && (
+                <tr>
+                  <td colSpan={100}>
+                    <IconServerError />
+                  </td>
+                </tr>
+              )}
 
-              {/* <tr>
-              <td colSpan={100}>
-                <IconServerError />
-              </td>
-            </tr> */}
               {result?.count > 0 &&
                 result.data.map((item, key) => (
                   <tr key={key}>
                     <td>{counter++}</td>
                     <td>
-                      {item.category_is_active === 1 ? (
-                        <Pills text="Active" />
+                      {item.role_is_active === 1 ? (
+                        <Status text="Active" />
                       ) : (
-                        <Pills text="InActive" />
+                        <Status text="InActive" />
                       )}
                     </td>
-                    <td>{item.category_title}</td>
+                    <td>{item.role_name}</td>
+                    <td>{item.role_description}</td>
+
                     <td>
                       <ul className="table-action">
-                        {item.category_is_active === 1 ? (
+                        {item.role_is_active === 1 ? (
                           <>
                             <li>
                               <button
@@ -152,28 +169,31 @@ const CategoriesTable = ({ setIsCategoryEdit }) => {
       {store.isDelete && (
         <ModalDelete
           setIsDelete={setIsDelete}
-          mysqlApiDelete={`/v2/category/${id}`}
-          queryKey={"category"}
-        />
-      )}
-      {store.isArchive && (
-        <ModalArchive
-          setIsArchive={setIsArchive}
-          mysqlEndpoint={`/v2/category/active/${id}`}
-          queryKey={"category"}
-        />
-      )}
-      {store.isRestore && (
-        <ModalRestore
-          setIsRestore={setIsRestore}
-          mysqlEndpoint={`/v2/category/active/${id}`}
-          queryKey={"category"}
+          mysqlApiDelete={`/v2/role/${id}`}
+          queryKey={"role"}
+          item={dataItem.role_name}
         />
       )}
 
-      {store.isView && <ModalView movieInfo={movieInfo} />}
+      {store.isArchive && (
+        <ModalArchive
+          setIsArchive={setIsArchive}
+          mysqlEndpoint={`/v2/role/active/${id}`}
+          queryKey={"role"}
+        />
+      )}
+
+      {store.isRestore && (
+        <ModalRestore
+          setIsRestore={setIsRestore}
+          mysqlEndpoint={`/v2/role/active/${id}`}
+          queryKey={"role"}
+        />
+      )}
+
+      {store.isConfirm && <ModalConfirm />}
     </>
   );
 };
 
-export default CategoriesTable;
+export default RoleList;

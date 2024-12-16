@@ -8,6 +8,7 @@ import {
   Utensils,
 } from "lucide-react";
 import React from "react";
+import { FaCog } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 const SideNavigation = ({ menu }) => {
@@ -31,6 +32,11 @@ const SideNavigation = ({ menu }) => {
       title: "Category",
       slug: "/admin/categories",
       icon: <Component size={16} />,
+    },
+    {
+      title: "Settings",
+      slug: "/admin/settings",
+      icon: <FaCog size={16} />,
     },
   ];
 

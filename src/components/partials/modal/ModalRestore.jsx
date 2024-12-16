@@ -6,11 +6,16 @@ import { GrFormClose } from "react-icons/gr";
 import ButtonSpinner from "../spinner/ButtonSpinner";
 import { StoreContext } from "@/components/store/storeContext";
 import ModalWrapper from "@/components/pages/backend/partials/modals/ModalWrapper";
-import { setIsRestore } from "@/components/store/storeAction";
+import {
+  setError,
+  setIsRestore,
+  setMessage,
+  setSuccess,
+} from "@/components/store/storeAction";
 import { MdRestore } from "react-icons/md";
 import { ArchiveRestore } from "lucide-react";
 
-const ModalRestore = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
+const ModalRestore = ({ setIsRestore, mysqlEndpoint, queryKey, item }) => {
   const { store, dispatch } = React.useContext(StoreContext);
   const handleClose = () => {
     dispatch(setIsRestore(false));
@@ -26,10 +31,13 @@ const ModalRestore = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
       // dispatch(setIsDelete(false));
 
       if (!data.success) {
-        console.log("May error!");
+        dispatch(setError(true));
+        dispatch(setMessage(data.error));
+        dispatch(setIsRestore(false));
       } else {
         dispatch(setIsRestore(false));
-        console.log("Naysuu!");
+        dispatch(setSuccess(true));
+        dispatch(setMessage("Successful"));
       }
     },
   });

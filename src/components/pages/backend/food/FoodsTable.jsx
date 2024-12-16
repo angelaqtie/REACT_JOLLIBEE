@@ -1,6 +1,5 @@
 import { Archive, ArchiveRestore, FilePenLine, Trash2 } from "lucide-react";
 import React from "react";
-import Pills from "../partials/Pills";
 import IconServerError from "../partials/IconServerError";
 import LoadMore from "../partials/LoadMore";
 import SpinnerTable from "../partials/spinners/SpinnerTable";
@@ -17,10 +16,10 @@ import {
 import ModalDelete from "../partials/modals/ModalDelete";
 import ModalConfirm from "../partials/modals/ModalConfirm";
 import { menus } from "../menu-data";
-import Status from "@/components/partials/Status";
 import useQueryData from "@/components/custom-hook/useQueryData";
 import ModalArchive from "@/components/partials/modal/ModalArchive";
 import ModalRestore from "@/components/partials/modal/ModalRestore";
+import Pills from "../partials/Pills";
 
 const FoodsTable = ({ setItemEdit }) => {
   const { store, dispatch } = React.useContext(StoreContext);
@@ -91,9 +90,9 @@ const FoodsTable = ({ setItemEdit }) => {
                     <td>{counter++}</td>
                     <td>
                       {item.food_is_active === 1 ? (
-                        <Status text="Active" />
+                        <Pills text="Active" />
                       ) : (
-                        <Status text="InActive" />
+                        <Pills text="InActive" />
                       )}
                     </td>
                     <td>{item.food_title}</td>

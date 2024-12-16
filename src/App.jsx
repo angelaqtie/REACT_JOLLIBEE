@@ -11,6 +11,10 @@ import Login from "./components/pages/backend/access/Login";
 import SetPassword from "./components/pages/backend/access/SetPassword";
 import ForgotPassword from "./components/pages/backend/access/ForgotPassword";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Settings from "./components/pages/backend/settings/Settings";
+import Role from "./components/pages/backend/settings/role/Role";
+import { routeAdmin } from "./routes/routesAdmin";
+import { routeDeveloper } from "./routes/routesDeveloper";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -21,10 +25,27 @@ const App = () => {
           <Routes>
             <Route index element={<Welcome />} />
             <Route path="/order" element={<Order />} />
-            <Route path="/admin/dashboard" element={<Dashboard />} />
+
+            {routeAdmin.map((item, key) => {
+              return (
+                <Route path={item.route} key={key} element={item.element} />
+              );
+            })}
+
+            {routeDeveloper.map((item, key) => {
+              return (
+                <Route path={item.route} key={key} element={item.element} />
+              );
+            })}
+            {/* <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/settings" element={<Settings />} />
+            <Route path="/admin/settings/role" element={<Role />} />
+            <Route path="/admin/settings/developer" element={<Settings />} />
+            <Route path="/admin/settings/admin" element={<Settings />} />
             <Route path="/admin/advertisement" element={<Advertisement />} />
             <Route path="/admin/food" element={<Food />} />
-            <Route path="/admin/categories" element={<Categories />} />
+            <Route path="/admin/categories" element={<Categories />} /> */}
+
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/set-password" element={<SetPassword />} />
             <Route path="/admin/forgot-password" element={<ForgotPassword />} />

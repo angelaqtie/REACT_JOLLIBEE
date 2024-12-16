@@ -3,16 +3,18 @@ import React from "react";
 import ModalWrapper from "./ModalWrapper";
 import SpinnerButton from "../spinners/SpinnerButton";
 import { StoreContext } from "@/components/store/storeContext";
-import { setIsDelete } from "@/components/store/storeAction";
+import {
+  setError,
+  setIsDelete,
+  setMessage,
+  setSuccess,
+} from "@/components/store/storeAction";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryData } from "@/components/helpers/queryData";
 
 const ModalDelete = ({ setIsDelete, mysqlApiDelete, queryKey, item }) => {
   const { dispatch } = React.useContext(StoreContext);
-
-  const handleClose = () => {
-    dispatch(setIsDelete(false));
-  };
+  const handleClose = () => dispatch(setIsDelete(false));
 
   const queryClient = useQueryClient();
 
@@ -24,14 +26,12 @@ const ModalDelete = ({ setIsDelete, mysqlApiDelete, queryKey, item }) => {
       dispatch(setIsDelete(false));
 
       if (!data.success) {
-        // dispatch(setError(true));
-        // dispatch(setMessage(data.error));
-        console.log("May error!");
+        dispatch(setError(true));
+        dispatch(setMessage(data.error));
       } else {
-        setIsDelete(false);
-        console.log("Naysuu!");
-        // dispatch(setSuccess(true));
-        // dispatch(setMessage(successMsg));
+        dispatch(setIsDelete(false));
+        dispatch(setSuccess(true));
+        dispatch(setMessage(successMsg));
       }
     },
   });
@@ -61,7 +61,7 @@ const ModalDelete = ({ setIsDelete, mysqlApiDelete, queryKey, item }) => {
 
             <div className="flex justify-end gap-3 mt-5">
               <button className="btn btn-alert" onClick={handleYes}>
-                <SpinnerButton /> Delete
+                {mutation.isPending ? <SpinnerButton /> : "Save"}
               </button>
               <button className="btn btn-cancel" onClick={handleClose}>
                 Cancel

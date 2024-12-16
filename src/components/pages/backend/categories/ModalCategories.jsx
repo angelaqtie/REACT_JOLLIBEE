@@ -62,7 +62,6 @@ const ModalCategories = ({ isCategoryEdit, setIsCategoryEdit }) => {
 
   const initVal = {
     category_aid: isCategoryEdit ? isCategoryEdit.category_aid : " ",
-    category_image: isCategoryEdit ? isCategoryEdit.category_image : " ",
     category_title: isCategoryEdit ? isCategoryEdit.category_title : " ",
   };
 
