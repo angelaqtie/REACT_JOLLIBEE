@@ -45,6 +45,7 @@ const FoodsTable = ({ setItemEdit }) => {
   };
 
   const {
+    isLoading,
     isFetching,
     error,
     data: result,
@@ -58,9 +59,8 @@ const FoodsTable = ({ setItemEdit }) => {
   return (
     <>
       <div className="p-4 bg-secondary mt-10 rounded-md border border-line relative">
-        {/* <SpinnerTable /> */}
+        {isFetching && !isLoading && <SpinnerTable />}
         <div className="table-wrapper custom-scroll">
-          {/* <TableLoader count={20} cols={4} /> */}
           <table>
             <thead>
               <tr>
@@ -73,17 +73,28 @@ const FoodsTable = ({ setItemEdit }) => {
               </tr>
             </thead>
             <tbody>
-              {/* <tr>
-              <td colSpan={100}>
-                <IconNoData />
-              </td>
-            </tr> */}
+              {isLoading && (
+                <tr>
+                  <td colSpan="100%">
+                    <TableLoader count={20} cols={4} />
+                  </td>
+                </tr>
+              )}
+              {result?.count === 0 && (
+                <tr>
+                  <td colSpan={100}>
+                    <IconNoData />
+                  </td>
+                </tr>
+              )}
+              {error && (
+                <tr>
+                  <td colSpan={100}>
+                    <IconServerError />
+                  </td>
+                </tr>
+              )}
 
-              {/* <tr>
-              <td colSpan={100}>
-                <IconServerError />
-              </td>
-            </tr> */}
               {result?.count > 0 &&
                 result.data.map((item, key) => (
                   <tr key={key}>

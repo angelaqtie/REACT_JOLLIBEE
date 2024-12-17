@@ -56,7 +56,9 @@ const ModalAddRole = ({ itemEdit }) => {
   };
 
   const yupSchema = Yup.object({
-    role_name: Yup.string().required("Required"),
+    role_name: Yup.string()
+      .matches(/^[A-Za-z]+$/, "Invalid Name")
+      .required("Required"),
     role_description: Yup.string().required("Required"),
   });
 

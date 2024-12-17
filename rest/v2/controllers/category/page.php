@@ -21,7 +21,7 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
         // get data
         // get task id from query string
         $category->category_start = $_GET['start'];
-        $category->category_total = 11;
+        $category->category_total = 3;
         //check to see if task id in query string is not empty and is number, if not return json error
         checkLimitId($category->category_start, $category->category_total);
 

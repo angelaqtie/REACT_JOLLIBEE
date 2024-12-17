@@ -25,7 +25,7 @@ const User = () => {
         <div className="layout-division ">
           <SideNavigation menu="settings" />
           <main>
-            <Header title="Settings" subtitle="Welcome to Jollibee" />
+            <Header title="Users" subtitle="Welcome to Jollibee" />
             <div className="p-5">
               <div className="flex justify-between items-center">
                 <div></div>

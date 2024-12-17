@@ -118,7 +118,7 @@ const AdvertisementTable = () => {
             </tbody>
           </table>
 
-          <LoadMore />
+          {/* <LoadMore /> */}
         </div>
       </div>
 

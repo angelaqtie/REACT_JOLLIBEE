@@ -4,6 +4,7 @@ import Dashboard from "@/components/pages/backend/dashboard/Dashboard";
 import Food from "@/components/pages/backend/food/Food";
 import Role from "@/components/pages/backend/settings/role/Role";
 import Settings from "@/components/pages/backend/settings/Settings";
+import User from "@/components/pages/backend/settings/users/User";
 
 export const routeDeveloper = [
   {
@@ -35,7 +36,7 @@ export const routeDeveloper = [
     element: <Settings />,
   },
   {
-    route: `/developer/settings/developer`,
-    element: <Settings />,
+    route: `/developer/settings/users`,
+    element: <User />,
   },
 ];
