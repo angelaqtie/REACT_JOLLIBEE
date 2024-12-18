@@ -4,14 +4,17 @@ import { ImagePlusIcon, X } from "lucide-react";
 import Spinner from "../partials/spinners/Spinner";
 import SpinnerButton from "../partials/spinners/SpinnerButton";
 import { StoreContext } from "@/components/store/storeContext";
-import { setIsAdd } from "@/components/store/storeAction";
+import { setError, setIsAdd, setMessage, setSuccess } from "@/components/store/storeAction";
 import { Form, Formik } from "formik";
 
 import * as Yup from "Yup";
 import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
 import { InputPhotoUpload, InputText } from "@/components/helpers/FormInputs,";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryData } from "@/components/helpers/queryData";
+import { imgPath } from "@/components/helpers/functions-general";
 
-const ModalAdvertisement = () => {
+const ModalAdvertisement = ({ isAdsEdit }) => {
   const { dispatch } = React.useContext(StoreContext);
   const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
 
@@ -19,8 +22,40 @@ const ModalAdvertisement = () => {
     dispatch(setIsAdd(false));
   };
 
+  const handleChange = (event) => {
+    setNestedObjectValues(event.target.value);
+  };
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (values) =>
+      queryData(
+        isAdsEdit
+          ? `/v2/advertisement/${isAdsEdit.advertisement_aid}`
+          : "/v2/advertisement",
+        isAdsEdit ? "PUT" : "POST",
+        values
+      ),
+    onSuccess: (data) => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["advertisement"] });
+
+      // show error box
+      if (!data.success) {
+        dispatch(setError(true));
+        dispatch(setMessage(data.error));
+        dispatch(setSuccess(false));
+      } else {
+        console.log("Success");
+        dispatch(setIsAdd(false));
+        dispatch(setSuccess(true));
+        dispatch(setMessage("Record Successful!"));
+      }
+    },
+  });
+
   const initVal = {
-    advertisement_title: "",
+    advertisement_title: isAdsEdit ? isAdsEdit.advertisement_title : "",
   };
 
   const yupSchema = Yup.object({
@@ -42,7 +77,17 @@ const ModalAdvertisement = () => {
             initialValues={initVal}
             validationSchema={yupSchema}
             onSubmit={async (values) => {
-              console.log(values);
+              mutation.mutate({
+                ...values,
+                advertisement_image:
+                  (isAdsEdit?.advertisement_image === "" && photo) ||
+                  (!photo && "") ||
+                  (photo === undefined && "") ||
+                  (photo && isAdsEdit?.advertisement_image !== photo?.name)
+                    ? photo?.name || ""
+                    : isAdsEdit?.advertisement_image || "",
+              });
+              uploadPhoto();
             }}
           >
             {(props) => {
@@ -59,7 +104,7 @@ const ModalAdvertisement = () => {
                       </div>
                       <div className="input-wrap relative  group input-photo-wrap h-[150px] ">
                         <label htmlFor="">Photo</label>
-                        {photo === null ? (
+                        {isAdsEdit === null && photo === null ? (
                           <div className="w-full border border-line rounded-md flex justify-center items-center flex-col h-full">
                             <ImagePlusIcon
                               size={50}
@@ -73,9 +118,9 @@ const ModalAdvertisement = () => {
                         ) : (
                           <img
                             src={
-                              true
+                              photo
                                 ? URL.createObjectURL(photo) // preview
-                                : imgPath + "/" + itemEdit?.movies_image // check db
+                                : imgPath + "/" + isAdsEdit?.advertisement_image // check db
                             }
                             alt="employee photo"
                             className={`group-hover:opacity-30 duration-200 relative object-cover h-full w-full  m-auto `}
@@ -96,8 +141,7 @@ const ModalAdvertisement = () => {
                     </div>
                     <div className="form-action flex p-4 justify-end gap-3">
                       <button className="btn btn-accent" type="submit">
-                        <SpinnerButton />
-                        Save
+                        {mutation.isPending ? <SpinnerButton /> : "Save"}
                       </button>
                       <button
                         className="btn btn-cancel"

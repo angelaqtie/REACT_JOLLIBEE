@@ -16,8 +16,34 @@ import {
   YAxis,
 } from "recharts";
 import { menus } from "../menu-data";
+import useQueryData from "@/components/custom-hook/useQueryData";
+import TableLoader from "../partials/TableLoader";
+import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
+import IconNoData from "../partials/IconNoData";
 
 const Dashboard = () => {
+  const {
+    isLoading: isLoadingCategory,
+    isFetching: isFetchingCategory,
+    error: errorCategory,
+    data: dataCategory,
+  } = useQueryData(
+    `/v2/category`, //endpoint
+    "get", //method
+    "category" //key
+  );
+
+  const {
+    isLoading: isLoadingFood,
+    isFetching: isFetchingFood,
+    error: errorFood,
+    data: dataFood,
+  } = useQueryData(
+    `/v2/food`, //endpoint
+    "get", //method
+    "food" //key
+  );
+
   return (
     <>
       <section className="layout-main ">
@@ -25,49 +51,54 @@ const Dashboard = () => {
           <SideNavigation menu="dashboard" />
           <main>
             <Header title="DashBoard" subtitle="Wlcome to Jollibee" />
-            <div className="p-8">
+            <div className="p-5 overflow-y-auto custom-scroll">
               <div className="grid grid-cols-[1fr_400px] gap-5">
                 <div className="stats">
-                  <div className="grid grid-cols-4 gap-5">
-                    <DashboardCard title="Chicken Joy" filterby="Chickenjoy" />
-                    <DashboardCard title="Value Meals" filterby="Value Meals" />
-                    <DashboardCard title="Burger" filterby="Burger" />
-                    <DashboardCard title="Spaghetti" filterby="Spaghetti" />
-                    <DashboardCard
-                      title="Burger Steak"
-                      filterby="Burger Steak"
-                    />
-                    <DashboardCard title="Desserts" filterby="Desserts" />
-                    <DashboardCard title="Palabok" filterby="Palabok" />
-                    <DashboardCard
-                      title="Fries & Sides"
-                      filterby="Fries & Sides"
-                    />
-                  </div>
-                  <div className="chart mt-10">
+                  <div className="chart pb-28">
                     <h3>Menu Charts</h3>
-                    <BarChart
-                      width={1200}
-                      height={400}
-                      data={menus.slice(0, 10)}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="menu_title" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar
-                        dataKey="menu_price"
-                        fill="#8884d8"
-                        activeBar={<Rectangle fill="pink" stroke="blue" />}
-                      />
-                    </BarChart>
+                    <ResponsiveContainer width={1200} height={292}>
+                      <BarChart
+                        width={1200}
+                        height={400}
+                        data={menus.slice(0, 10)}
+                        margin={{
+                          top: 5,
+                          right: 30,
+                          left: 20,
+                          bottom: 5,
+                        }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="menu_title" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar
+                          dataKey="menu_price"
+                          fill="#900603"
+                          activeBar={<Rectangle fill="red" stroke="white" />}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="relative">
+                    {isFetchingCategory && !isLoadingCategory && (
+                      <FetchingSpinner />
+                    )}
+                    {isLoadingCategory && <TableLoader cols={4} count={20} />}
+                    {dataCategory?.count === 0 && <IconNoData />}
+                    <div className="grid grid-cols-4 gap-5 mb-3">
+                      {dataCategory?.count > 0 &&
+                        dataCategory?.data.map((item, key) => {
+                          return (
+                            <DashboardCard
+                              key={key}
+                              item={item}
+                              dataFood={dataFood}
+                            />
+                          );
+                        })}
+                    </div>
                   </div>
                 </div>
 

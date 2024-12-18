@@ -19,11 +19,21 @@ const Order = () => {
     isFetching,
     error,
     data: result,
-    status,
   } = useQueryData(
     `/v2/category`, //endpoint
     "get", //method
     "category" //key
+    );
+  
+  const {
+    isLoading: isLoadingAdvertisement,
+    isFetching: isFetchingAdvertisement,
+    error: errorAdvertisement,
+    data: dataAdvertisement,
+  } = useQueryData(
+    `/v2/advertisement/read-all-active-advertisement`, //endpoint
+    "get", //method
+    "advertisement/read-all-active-advertisement" //key
   );
 
   const getCategoryName = (categoryId, categoryResult) => {
@@ -46,7 +56,12 @@ const Order = () => {
 
   return (
     <>
-      <SliderBanner />
+      <SliderBanner
+        isLoadingAdvertisement ={isLoadingAdvertisement}
+        isFetchingAdvertisement ={isFetchingAdvertisement}
+        errorAdvertisement ={errorAdvertisement}
+        dataAdvertisement ={dataAdvertisement}
+      />
       <div className="grid grid-rows-[auto,_1fr,_auto] min-h-[calc(100vh-200px)]">
         <MenuTitle categoryName={categoryName} />
         <section className="grid grid-cols-[150px,_1fr] bg-myred px-3">

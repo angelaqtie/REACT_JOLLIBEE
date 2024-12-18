@@ -62,7 +62,7 @@ class Category
       $sql = "select * from {$this->tblCategory} ";
       $sql .= "where category_title like :category_title ";
       $sql .= "order by category_is_active desc, ";
-      $sql .= "category_title asc ";
+      $sql .= "category_title ";
       $query = $this->connection->prepare($sql);
       $query->execute([
         "category_title" => "%{$this->category_search}%",

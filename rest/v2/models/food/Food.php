@@ -98,6 +98,68 @@ class Food
     }
     return $query;
   }
+
+
+  public function search()
+  {
+    try {
+      $sql = "select * ";
+      $sql .= "from ";
+      $sql .= "{$this->tblCategory} as category, ";
+      $sql .= "{$this->tblFood} as food ";
+      $sql .= "where food.food_title like :food_title ";
+      $sql .= "and category.category_aid = food.food_category_id ";
+      $sql .= "order by food_is_active desc, ";
+      $sql .= "food_title ";
+      $query = $this->connection->prepare($sql);
+      $query->execute([
+        "food_title" => "%{$this->food_search}%",
+      ]);
+    } catch (PDOException $ex) {
+      $query = false;
+    }
+    return $query;
+  }
+
+  public function filterActive()
+  {
+    try {
+      $sql = "select * from {$this->tblFood} ";
+      $sql .= "where food_is_active like :food_is_active ";
+      $sql .= "order by food_is_active desc, ";
+      $sql .= "food_title ";
+      $query = $this->connection->prepare($sql);
+      $query->execute([
+        "food_is_active" => $this->food_is_active,
+      ]);
+    } catch (PDOException $ex) {
+      $query = false;
+    }
+    return $query;
+  }
+
+  public function filterActiveSearch()
+  {
+    try {
+      $sql = "select * from {$this->tblFood} ";
+      $sql .= "where food_is_active = :food_is_active ";
+      $sql .= "and food_title like :food_title ";
+      $sql .= "order by food_is_active desc, ";
+      $sql .= "food_title ";
+      $query = $this->connection->prepare($sql);
+      $query->execute([
+        "food_is_active" => $this->food_is_active,
+        "food_title" => "%{$this->food_search}%",
+      ]);
+    } catch (PDOException $ex) {
+      $query = false;
+    }
+    return $query;
+  }
+
+
+
+
   public function readById()
   {
     try {

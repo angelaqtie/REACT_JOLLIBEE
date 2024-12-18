@@ -14,9 +14,11 @@ import ToastSuccess from "../partials/ToastSuccess";
 
 const Advertisement = () => {
   const { dispatch, store } = React.useContext(StoreContext);
+  const [isAdsEdit, setIsAdsEdit] = React.useState(null);
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
+    setIsAdsEdit(null);
   };
 
   return (
@@ -31,13 +33,13 @@ const Advertisement = () => {
             />
             <div className="p-8">
               <div className="flex justify-between items-center">
-                <Searchbar/>
+                <div></div>
                 <button className="btn btn-add" onClick={handleAdd}>
                   <Plus size={16} /> Add New
                 </button>
               </div>
 
-              <AdvertisementTable />
+              <AdvertisementTable setIsAdsEdit={setIsAdsEdit} />
             </div>
 
             <Footer />
@@ -47,7 +49,9 @@ const Advertisement = () => {
       {store.validate && <ModalValidation />}
       {store.error && <ModalError />}
       {store.success && <ToastSuccess />}
-      {store.isAdd && <ModalAdvertisement />}
+      {store.isAdd && (
+        <ModalAdvertisement setIsAdsEdit={setIsAdsEdit} isAdsEdit={isAdsEdit} />
+      )}
     </>
   );
 };

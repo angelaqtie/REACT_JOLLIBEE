@@ -32,8 +32,8 @@ const CategoriesTable = ({ setIsCategoryEdit }) => {
   const [id, setIsId] = React.useState("");
   const [isFilter, setIsFilter] = React.useState(false);
   const [onSearch, setOnSearch] = React.useState(false);
-  const [statusFilter, setStatusFilter] = React.useState("");
   const search = React.useRef({ value: "" });
+  const [statusFilter, setStatusFilter] = React.useState("");
   const [page, setPage] = React.useState(1);
   const { ref, inView } = useInView();
 
@@ -181,7 +181,7 @@ const CategoriesTable = ({ setIsCategoryEdit }) => {
                                 <button
                                   type="button"
                                   className=""
-                                  data-tootip="Edit"
+                                  data-tooltip="Edit"
                                   disabled={isFetching}
                                   onClick={() => handleEdit(item)}
                                 >
@@ -190,7 +190,7 @@ const CategoriesTable = ({ setIsCategoryEdit }) => {
                                 <button
                                   type="button"
                                   className=""
-                                  data-tootip="Archive"
+                                  data-tooltip="Archive"
                                   disabled={isFetching}
                                   onClick={() => handleArchive(item)}
                                 >
@@ -202,7 +202,7 @@ const CategoriesTable = ({ setIsCategoryEdit }) => {
                                 <button
                                   type="button"
                                   className="tool"
-                                  data-tootip="Restore"
+                                  data-tooltip="Restore"
                                   disabled={isFetching}
                                   onClick={() => handleRestore(item)}
                                 >
@@ -211,7 +211,7 @@ const CategoriesTable = ({ setIsCategoryEdit }) => {
                                 <button
                                   type="button"
                                   className="tool"
-                                  data-tootip="Delete"
+                                  data-tooltip="Delete"
                                   disabled={isFetching}
                                   onClick={() => handleDelete(item)}
                                 >
