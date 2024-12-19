@@ -188,7 +188,7 @@ export const menus = [
     menu_aid: 17,
     menu_title: "Burger Steak Pan",
     menu_category: "Burger Steak",
-    menu_price: "350",
+    menu_price: "1000",
     menu_image: "steak-2.webp",
     menu_is_active: true,
   },

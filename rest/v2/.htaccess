@@ -7,6 +7,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 
 Header set Access-Control-Allow-Origin * 
 
+RewriteRule ^upload-photo$ core/upload-photo.php [L]
+
 RewriteRule ^category$ controllers/category/category.php [L]
 RewriteRule ^category/([0-9]+)$ controllers/category/category.php?categoryid=$1 [L]
 RewriteRule ^category/active/([0-9]+)$ controllers/category/active.php?categoryid=$1 [L]

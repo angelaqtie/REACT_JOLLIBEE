@@ -155,20 +155,35 @@ class Category
     return $query;
   }
 
-  // public function checkName()
-  // {
-  //   try {
-  //     $sql = "select other_name from {$this->tblOther} ";
-  //     $sql .= "where other_name = :other_name ";
-  //     $query = $this->connection->prepare($sql);
-  //     $query->execute([
-  //       "other_name" => "{$this->other_name}",
-  //     ]);
-  //   } catch (PDOException $ex) {
-  //     $query = false;
-  //   }
-  //   return $query;
-  // }
+  public function checkName()
+  {
+    try {
+      $sql = "select category_title from {$this->tblCategory} ";
+      $sql .= "where category_title = :category_title ";
+      $query = $this->connection->prepare($sql);
+      $query->execute([
+        "category_title" => "{$this->category_title}",
+      ]);
+    } catch (PDOException $ex) {
+      $query = false;
+    }
+    return $query;
+  }
+
+  public function checkAssociation()
+  {
+    try {
+      $sql = "select category_aid from {$this->tblCategory} ";
+      $sql .= "where category_aid = :category_aid ";
+      $query = $this->connection->prepare($sql);
+      $query->execute([
+        "category_aid" => "{$this->category_aid}",
+      ]);
+    } catch (PDOException $ex) {
+      $query = false;
+    }
+    return $query;
+  }
 
   public function update()
   {

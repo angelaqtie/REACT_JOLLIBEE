@@ -26,7 +26,8 @@ import { queryData } from "@/components/helpers/queryData";
 
 const ModalAddFood = ({ itemEdit }) => {
   const { dispatch } = React.useContext(StoreContext);
-  const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
+  const { uploadPhoto, handleChangePhoto, photo } =
+    useUploadPhoto("/v2/upload-photo");
   const [value, setValue] = React.useState("");
 
   const handleClose = () => {
@@ -105,6 +106,7 @@ const ModalAddFood = ({ itemEdit }) => {
             initialValues={initVal}
             validationSchema={yupSchema}
             onSubmit={async (values) => {
+              uploadPhoto();
               mutation.mutate({
                 ...values,
                 food_image:
@@ -183,17 +185,17 @@ const ModalAddFood = ({ itemEdit }) => {
                           name="food_category_id"
                           onChange={handleChange}
                         >
-                          <option value="hidden"></option>
+                          <option value="" hidden></option>
                           {categ?.data.map((item, key) => {
                             return (
-                              <>
+                              <React.Fragment key={key}>
                                 {item.category_is_active === 1 && (
-                                  <option key={key} value={item.category_aid}>
+                                  <option value={item.category_aid}>
                                     {item.category_title}
                                   </option>
                                 )}
                                 ;
-                              </>
+                              </React.Fragment>
                             );
                           })}
                         </InputSelect>
@@ -201,7 +203,7 @@ const ModalAddFood = ({ itemEdit }) => {
                     </div>
                     <div className="form-action flex p-4 justify-end gap-3">
                       <button className="btn btn-accent" type="submit">
-                        <SpinnerButton />
+                        {mutation.isPending && <SpinnerButton />}
                         Save
                       </button>
                       <button

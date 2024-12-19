@@ -20,6 +20,8 @@ import useQueryData from "@/components/custom-hook/useQueryData";
 import TableLoader from "../partials/TableLoader";
 import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
 import IconNoData from "../partials/IconNoData";
+import { getCategoryPrices } from "./function";
+import { data } from "autoprefixer";
 
 const Dashboard = () => {
   const {
@@ -44,6 +46,9 @@ const Dashboard = () => {
     "food" //key
   );
 
+  const tableData = getCategoryPrices(dataCategory, dataFood);
+  console.log(tableData);
+
   return (
     <>
       <section className="layout-main ">
@@ -54,56 +59,75 @@ const Dashboard = () => {
             <div className="p-5 overflow-y-auto custom-scroll">
               <div className="grid grid-cols-[1fr_400px] gap-5">
                 <div className="stats">
-                  <div className="chart pb-28">
-                    <h3>Menu Charts</h3>
-                    <ResponsiveContainer width={1200} height={292}>
-                      <BarChart
-                        width={1200}
-                        height={400}
-                        data={menus.slice(0, 10)}
-                        margin={{
-                          top: 5,
-                          right: 30,
-                          left: 20,
-                          bottom: 5,
-                        }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="menu_title" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar
-                          dataKey="menu_price"
-                          fill="#900603"
-                          activeBar={<Rectangle fill="red" stroke="white" />}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
+                  <div className="relative chart pb-16">
+                    {(isFetchingCategory || isFetchingFood) &&
+                      !isLoadingCategory &&
+                      !isLoadingFood && <FetchingSpinner />}
+                    {isLoadingCategory || isLoadingFood ? (
+                      <TableLoader cols={1} count={15} />
+                    ) : (
+                      <ResponsiveContainer width={1275} height={400}>
+                        <h3>Menu Prices</h3>
+                        <BarChart
+                          width={500}
+                          height={500}
+                          // data={menus.slice(0, 10)}
+                          data={tableData}
+                          margin={{
+                            top: 10,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
+                          }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="category_title" interval={0} />
+                          <YAxis />
+                          <Tooltip />
+                          <Legend />
+                          <Bar
+                            dataKey="menu_price"
+                            fill="#900D09"
+                            activeBar={<Rectangle fill="red" stroke="white" />}
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    )}
                   </div>
                   <div className="relative">
                     {isFetchingCategory && !isLoadingCategory && (
                       <FetchingSpinner />
                     )}
-                    {isLoadingCategory && <TableLoader cols={4} count={20} />}
+                    {isLoadingCategory && <TableLoader cols={4} count={10} />}
                     {dataCategory?.count === 0 && <IconNoData />}
-                    <div className="grid grid-cols-4 gap-5 mb-3">
+                    <div className="grid grid-cols-4 gap-5">
                       {dataCategory?.count > 0 &&
-                        dataCategory?.data.map((item, key) => {
-                          return (
-                            <DashboardCard
-                              key={key}
-                              item={item}
-                              dataFood={dataFood}
-                            />
-                          );
-                        })}
+                        dataCategory.data.map((item, key) => (
+                          <DashboardCard
+                            key={key}
+                            item={item}
+                            dataFood={dataFood}
+                          />
+                        ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="sidebar overflow-auto custom-scroll h-[calc(100vh-200px)]">
-                  <DashboardAccordion
+                <div className="sidebar overflow-auto custom-scroll h-[calc(100vh-200px)] relative">
+                  {isFetchingCategory && <TableLoader cols={1} count={15} />}
+                  {dataCategory?.count === 0 && <IconNoData />}
+                  {dataCategory?.count > 0 &&
+                    dataCategory?.data.map((item, key) => {
+                      return (
+                        <DashboardAccordion
+                          key={key}
+                          item={item}
+                          dataFood={dataFood}
+                        />
+                      );
+                    })}
+
+                  {/* <DashboardAccordion
                     title="Chicken Joy"
                     filterby="Chickenjoy"
                   />
@@ -122,7 +146,7 @@ const Dashboard = () => {
                     title="Fries & Sides"
                     filterby="Fries & Sides"
                   />
-                  <DashboardAccordion title="Desserts" filterby="Desserts" />
+                  <DashboardAccordion title="Desserts" filterby="Desserts" /> */}
                 </div>
               </div>
             </div>

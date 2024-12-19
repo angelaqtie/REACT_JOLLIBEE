@@ -1,13 +1,16 @@
 import React from "react";
 import { menus } from "../menu-data";
 import { ChevronDown, Dot } from "lucide-react";
+import { getFoodByCategory } from "./function";
+import IconNoData from "../partials/IconNoData";
 
-const DashboardAccordion = ({ title = "", filterby = "" }) => {
+const DashboardAccordion = ({ item, dataFood }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const foodItem = getFoodByCategory(item.category_aid, dataFood);
 
-  const getCardDetails = menus.filter(
-    (item) => item.menu_category === filterby
-  );
+  // const getCardDetails = menus.filter(
+  //   (item) => item.menu_category === filterby
+  // );
 
   const handleToggleOpen = () => setIsOpen((prev) => !prev);
 
@@ -17,7 +20,7 @@ const DashboardAccordion = ({ title = "", filterby = "" }) => {
         className="accordion-header p-2 flex justify-between bg-secondary rounded-t-md cursor-pointer"
         onClick={handleToggleOpen}
       >
-        <h6 className="mb-0">{title}</h6>
+        <h6 className="mb-0">{item.category_title}</h6>
         <ChevronDown
           className={`transition-all ${isOpen ? "rotate-180" : ""}`}
         />
@@ -28,15 +31,17 @@ const DashboardAccordion = ({ title = "", filterby = "" }) => {
         }`}
       >
         <ul className="space-y-3 px-2 py-4">
-          {getCardDetails.map((item, key) => (
+          {/* {foodItem?.length == 0 && <IconNoData />}
+          {foodItem?.length > 0 &&} */}
+          {foodItem.map((item, key) => (
             <li className="flex items-center" key={key}>
               <Dot
                 size={30}
                 className={`${
-                  item.menu_is_active ? "text-success" : "text-gray"
+                  item.food_is_active ? "text-success" : "text-gray"
                 }`}
               />
-              {item.menu_title}
+              {item.food_title}
             </li>
           ))}
         </ul>

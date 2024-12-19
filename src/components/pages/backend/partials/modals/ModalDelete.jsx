@@ -4,40 +4,38 @@ import ModalWrapper from "./ModalWrapper";
 import SpinnerButton from "../spinners/SpinnerButton";
 import { StoreContext } from "@/components/store/storeContext";
 import {
-  setError,
   setIsDelete,
   setMessage,
   setSuccess,
+  setValidate,
 } from "@/components/store/storeAction";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryData } from "@/components/helpers/queryData";
 
 const ModalDelete = ({ setIsDelete, mysqlApiDelete, queryKey, item }) => {
   const { dispatch } = React.useContext(StoreContext);
-  const handleClose = () => dispatch(setIsDelete(false));
-
+  const handleClose = () => {
+    dispatch(setIsDelete(false));
+  };
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: (values) => queryData(mysqlApiDelete, "delete", values),
     onSuccess: (data) => {
-      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: [queryKey] });
-      dispatch(setIsDelete(false));
-
+      handleClose();
       if (!data.success) {
-        dispatch(setError(true));
+        dispatch(setValidate(true));
         dispatch(setMessage(data.error));
       } else {
         dispatch(setIsDelete(false));
         dispatch(setSuccess(true));
-        dispatch(setMessage(successMsg));
+        dispatch(setMessage("Record Successfully Deleted"));
       }
     },
   });
 
   const handleYes = async () => {
-    // mutate data
     mutation.mutate({
       item: item,
     });
@@ -56,12 +54,13 @@ const ModalDelete = ({ setIsDelete, mysqlApiDelete, queryKey, item }) => {
           </div>
           <div className="modal-body p-2 py-4">
             <p className="mb-0 text-center">
-              Are you sure you want to remove ths category?
+              Are you sure you want to remove this recipe?
             </p>
 
             <div className="flex justify-end gap-3 mt-5">
               <button className="btn btn-alert" onClick={handleYes}>
-                {mutation.isPending ? <SpinnerButton /> : "Save"}
+                {mutation.isPending && <SpinnerButton />}
+                Delete
               </button>
               <button className="btn btn-cancel" onClick={handleClose}>
                 Cancel

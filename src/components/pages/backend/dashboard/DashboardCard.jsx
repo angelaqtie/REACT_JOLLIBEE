@@ -9,13 +9,12 @@ const DashboardCard = ({ item, dataFood }) => {
   const inactiveFood = foodItem
     ?.filter((item) => item.food_is_active == 0)
     .reduce((prev, cur) => prev + 1, 0);
-  console.log(foodItem, activeFood);
 
   return (
     <>
       <div className="card bg-secondary p-4 rounded-md border border-line">
         <small>{item.category_title}</small>
-        <h2 className="text-4xl mt-1 mb-2"> {activeFood}</h2>
+        <h2 className="text-4xl mt-1 mb-2"> {foodItem?.length}</h2>
         <ul className="flex gap-5 items-center">
           <li className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-success block"></span>

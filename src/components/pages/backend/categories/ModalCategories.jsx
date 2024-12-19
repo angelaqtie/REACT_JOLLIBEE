@@ -63,6 +63,8 @@ const ModalCategories = ({ isCategoryEdit, setIsCategoryEdit }) => {
   const initVal = {
     category_aid: isCategoryEdit ? isCategoryEdit.category_aid : " ",
     category_title: isCategoryEdit ? isCategoryEdit.category_title : " ",
+
+    category_title_old: isCategoryEdit ? isCategoryEdit.category_title : " ",
   };
 
   const yupSchema = Yup.object({
