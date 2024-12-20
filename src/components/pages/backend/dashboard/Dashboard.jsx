@@ -126,27 +126,6 @@ const Dashboard = () => {
                         />
                       );
                     })}
-
-                  {/* <DashboardAccordion
-                    title="Chicken Joy"
-                    filterby="Chickenjoy"
-                  />
-                  <DashboardAccordion
-                    title="Value Meals"
-                    filterby="Value Meals"
-                  />
-                  <DashboardAccordion title="Burger" filterby="Burger" />
-                  <DashboardAccordion title="Spaghetti" filterby="Spaghetti" />
-                  <DashboardAccordion
-                    title="Burger Steak"
-                    filterby="Burger Steak"
-                  />
-                  <DashboardAccordion title="Palabok" filterby="Palabok" />
-                  <DashboardAccordion
-                    title="Fries & Sides"
-                    filterby="Fries & Sides"
-                  />
-                  <DashboardAccordion title="Desserts" filterby="Desserts" /> */}
                 </div>
               </div>
             </div>
