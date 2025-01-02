@@ -15,6 +15,7 @@ import Settings from "./components/pages/backend/settings/Settings";
 import Role from "./components/pages/backend/settings/role/Role";
 import { routeAdmin } from "./routes/routesAdmin";
 import { routeDeveloper } from "./routes/routesDeveloper";
+import DeveloperCreatePassword from "./components/pages/backend/access/create-password/DeveloperCreatePassword";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -26,17 +27,18 @@ const App = () => {
             <Route index element={<Welcome />} />
             <Route path="/order" element={<Order />} />
 
+            {routeDeveloper.map((item, key) => {
+              return (
+                <Route path={item.route} key={key} element={item.element} />
+              );
+            })}
+
             {routeAdmin.map((item, key) => {
               return (
                 <Route path={item.route} key={key} element={item.element} />
               );
             })}
 
-            {routeDeveloper.map((item, key) => {
-              return (
-                <Route path={item.route} key={key} element={item.element} />
-              );
-            })}
             {/* <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/settings" element={<Settings />} />
             <Route path="/admin/settings/role" element={<Role />} />
@@ -48,6 +50,10 @@ const App = () => {
 
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/set-password" element={<SetPassword />} />
+            <Route
+              path="/developer/create-password"
+              element={<DeveloperCreatePassword />}
+            />
             <Route path="/admin/forgot-password" element={<ForgotPassword />} />
           </Routes>
         </Router>

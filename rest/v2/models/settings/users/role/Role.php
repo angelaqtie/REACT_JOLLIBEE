@@ -173,7 +173,7 @@ class Role
   {
     try {
       $sql = "alter table {$this->tblRole} ";
-      $sql .= "add column role_is_{$column_name} boolean ";
+      $sql .= "add column  boolean ";
       $sql .= "NOT NULL ";
       $query = $this->connection->query($sql);
     } catch (PDOException $ex) {

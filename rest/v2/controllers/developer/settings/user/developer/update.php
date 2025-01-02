@@ -25,7 +25,7 @@ if (array_key_exists("roleid", $_GET)) {
 
   // update
   $query = checkUpdate($role);
-  checkUpdateColumnName($role, strtolower($role->role_name), strtolower($role_name_old));
+  checkUpdateColumnName($role, $role->role_name, $role_name_old);
   returnSuccess($role, "role", $query);
 }
 

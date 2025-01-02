@@ -1,21 +1,38 @@
 import React from "react";
 import SideNavigation from "../../partials/SideNavigation";
 import Header from "../../partials/Header";
-import RoleList from "./RoleList";
 import Footer from "../../partials/Footer";
 import { StoreContext } from "@/components/store/storeContext";
-import { setIsAdd } from "@/components/store/storeAction";
+import { setError, setIsAdd, setMessage } from "@/components/store/storeAction";
 import { FaPlus } from "react-icons/fa";
-import ModalAddRole from "./ModalAddRole";
 import ModalError from "../../partials/modals/ModalError";
-import ModalSuccess from "@/components/partials/modal/modalSuccess";
 import ToastSuccess from "../../partials/ToastSuccess";
+import UserList from "./DeveloperList";
+import ModalAddUser from "./ModalAddDeveloper";
+import DeveloperList from "./DeveloperList";
+import ModalAddDeveloper from "./ModalAddDeveloper";
+import useQueryData from "@/components/custom-hook/useQueryData";
 
-const Role = () => {
+const Developer = () => {
   const { dispatch, store } = React.useContext(StoreContext);
   const [itemEdit, setItemEdit] = React.useState(null);
 
+  const { isLoading, data: role } = useQueryData(
+    `/v2/role`, //endpoint
+    "get", //method
+    "role" //key
+  );
+
+  const developerRole = role?.data.filter(
+    (item) => item.role_is_developer == 1
+  );
+
   const handleAdd = () => {
+    if (developerRole?.length === 0) {
+      dispatch(setError(true));
+      dispatch(setMessage("Developer role is requiered"));
+      return;
+    }
     setItemEdit(null);
     dispatch(setIsAdd(true));
   };
@@ -26,7 +43,7 @@ const Role = () => {
         <div className="layout-division ">
           <SideNavigation menu="settings" />
           <main>
-            <Header title="Role" subtitle="Welcome to Jollibee" />
+            <Header title="Developer" subtitle="Welcome to Jollibee" />
             <div className="p-5">
               <div className="flex justify-between items-center">
                 <div></div>
@@ -38,7 +55,7 @@ const Role = () => {
                   <FaPlus /> Add New
                 </button>
               </div>
-              <RoleList setItemEdit={setItemEdit} />
+              <DeveloperList setItemEdit={setItemEdit} />
             </div>
             <Footer />
           </main>
@@ -46,9 +63,11 @@ const Role = () => {
       </section>
       {store.success && <ToastSuccess />}
       {store.error && <ModalError />}
-      {store.isAdd && <ModalAddRole itemEdit={itemEdit} />}
+      {store.isAdd && (
+        <ModalAddDeveloper itemEdit={itemEdit} developerRole={developerRole} />
+      )}
     </>
   );
 };
 
-export default Role;
+export default Developer;
