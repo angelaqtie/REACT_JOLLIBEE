@@ -16,6 +16,7 @@ import * as Yup from "Yup";
 import { InputText } from "@/components/helpers/FormInputs,";
 import { Form, Formik } from "formik";
 import {
+  setCreatePassSuccess,
   setError,
   setMessage,
   setSuccess,
@@ -25,6 +26,7 @@ import useQueryData from "@/components/custom-hook/useQueryData";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryData } from "@/components/helpers/queryData";
 import { StoreContext } from "@/components/store/storeContext";
+import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
 
 const DeveloperCreatePassword = () => {
   const { dispatch, store } = React.useContext(StoreContext);
@@ -32,7 +34,7 @@ const DeveloperCreatePassword = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowCornfirmPassword] = React.useState(false);
   const [showIconPassword, setshowIconPassword] = React.useState(false);
-  const [success, setsuccess] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
   const [lowerValidated, setLowerValidated] = React.useState(false);
   const [upperValidated, setUpperValidated] = React.useState(false);
   const [numberValidated, setNumberValidated] = React.useState(false);
@@ -57,12 +59,13 @@ const DeveloperCreatePassword = () => {
         dispatch(setError(true));
         dispatch(setMessage(data.error));
       } else {
-        if (store.isCreatePassSuccess) {
-          dispatch(setCreatePassSuccess(false));
-          navigate(
-            `${devNavUrl}/create-password-succes?redirect=/developer/login`
-          );
-        }
+        // if (store.isCreatePassSuccess) {
+        //   dispatch(setCreatePassSuccess(false));
+        //   navigate(
+        //     `${devNavUrl}/create-password-succes?redirect=/developer/login`
+        //   );
+        // }
+        setSuccess(true);
       }
     },
   });
@@ -133,6 +136,7 @@ const DeveloperCreatePassword = () => {
   const initVal = {
     new_password: "",
     confirm_password: "",
+    key: paramKey,
   };
   const yupSchema = Yup.object({
     new_password: Yup.string()
@@ -168,6 +172,10 @@ const DeveloperCreatePassword = () => {
               Back to Login
             </Link>
           </div>
+        ) : isLoading ? (
+          <FetchingSpinner />
+        ) : key?.count === 0 || paramKey === null || paramKey === "" ? (
+          "Inavalid Page"
         ) : (
           <div>
             <h5 className="text-center">Set New Password</h5>
@@ -176,7 +184,7 @@ const DeveloperCreatePassword = () => {
               initialValues={initVal}
               validationSchema={yupSchema}
               onSubmit={async (values) => {
-                console.log(values);
+                mutation.mutate(values);
               }}
             >
               {(props) => {
@@ -299,10 +307,15 @@ const DeveloperCreatePassword = () => {
 
                     <button
                       className="btn btn-accent w-full center-all mt-5"
-                      onClick={() => setSuccess(true)}
+                      // onClick={() => setSuccess(true)}
                       type="submit"
+                      disabled={
+                        mutation.isPending ||
+                        props.values.new_password === "" ||
+                        props.values.confirm_password === ""
+                      }
                     >
-                      <SpinnerButton /> Set Password
+                      {mutation.isPending ? <SpinnerButton /> : "Set Password"}
                     </button>
                   </Form>
                 );

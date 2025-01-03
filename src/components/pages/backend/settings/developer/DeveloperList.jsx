@@ -6,7 +6,6 @@ import ModalRestore from "@/components/partials/modal/ModalRestore";
 import ModalArchive from "@/components/partials/modal/ModalArchive";
 import ModalDelete from "../../partials/modals/ModalDelete";
 import LoadMore from "../../partials/LoadMore";
-import { Archive, ArchiveRestore, FilePenLine, Trash2 } from "lucide-react";
 import {
   setIsAdd,
   setIsArchive,
@@ -45,16 +44,16 @@ const DeveloperList = ({ setItemEdit }) => {
   };
   const handleDelete = (item) => {
     dispatch(setIsDelete(true));
-    setIsId(item.role_aid);
+    setIsId(item.user_developer_aid);
     setIsDataItem(item);
   };
   const handleArchive = (item) => {
     dispatch(setIsArchive(true));
-    setIsId(item.role_aid);
+    setIsId(item.user_developer_aid);
   };
   const handleRestore = (item) => {
     dispatch(setIsRestore(true));
-    setIsId(item.role_aid);
+    setIsId(item.user_developer_aid);
   };
 
   // const {
@@ -172,6 +171,7 @@ const DeveloperList = ({ setItemEdit }) => {
                             <Status text={"Inactive"} />
                           )}
                         </td>
+                        <td>{`${item.user_developer_first_name} ${item.user_developer_last_name}`}</td>
                         <td>{item.user_developer_email}</td>
                         <td
                           colSpan="100%"
@@ -231,32 +231,42 @@ const DeveloperList = ({ setItemEdit }) => {
             </tbody>
           </table>
 
-          <LoadMore />
+          <div className="pb-10 flex items-center justify-center">
+            <LoadMore
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              hasNextPage={hasNextPage}
+              result={result?.pages[0]}
+              setPage={setPage}
+              page={page}
+              refView={ref}
+            />
+          </div>
         </div>
       </div>
 
       {store.isDelete && (
         <ModalDelete
           setIsDelete={setIsDelete}
-          mysqlApiDelete={`/v2/role/${id}`}
-          queryKey={"role"}
-          item={dataItem.role_name}
+          mysqlApiDelete={`/v2/developer/${id}`}
+          queryKey={"developer"}
+          item={dataItem.developer_name}
         />
       )}
 
       {store.isArchive && (
         <ModalArchive
           setIsArchive={setIsArchive}
-          mysqlEndpoint={`/v2/role/active/${id}`}
-          queryKey={"role"}
+          mysqlEndpoint={`/v2/developer/active/${id}`}
+          queryKey={"developer"}
         />
       )}
 
       {store.isRestore && (
         <ModalRestore
           setIsRestore={setIsRestore}
-          mysqlEndpoint={`/v2/role/active/${id}`}
-          queryKey={"role"}
+          mysqlEndpoint={`/v2/developer/active/${id}`}
+          queryKey={"developer"}
         />
       )}
 

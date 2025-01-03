@@ -137,7 +137,7 @@ class Developer
             $sql .= "{$this->tblRole} as role ";
             $sql .= "where ";
             $sql .= "dev.user_developer_role_id = role.role_aid ";
-            $sql .= "and dev.user_developer_is_active like :user_developer_is_active ";
+            $sql .= "and dev.user_developer_is_active = :user_developer_is_active ";
             $sql .= "order by dev.user_developer_is_active desc, ";
             $sql .= "dev.user_developer_first_name, ";
             $sql .= "dev.user_developer_last_name ";
@@ -161,7 +161,7 @@ class Developer
             $sql .= "{$this->tblRole} as role ";
             $sql .= "where ";
             $sql .= "dev.user_developer_role_id = role.role_aid ";
-            $sql .= "and dev.user_developer_is_active like :user_developer_is_active ";
+            $sql .= "and dev.user_developer_is_active = :user_developer_is_active ";
             $sql .= "and ";
             $sql .= " ( ";
             $sql .= "dev.user_developer_first_name like :user_developer_first_name ";
@@ -216,12 +216,12 @@ class Developer
             $sql .= "{$this->tblRole} as role ";
             $sql .= "where ";
             $sql .= "dev.user_developer_role_id = role.role_aid ";
-            $sql .= "and dev.user_developer_email = user_developer_email ";
-            $sql .= "and role.role_is_developer = 1  ";
-            $sql .= "and dev.user_developer_is_active = 1  ";
+            $sql .= "and dev.user_developer_email = :user_developer_email ";
+            $sql .= "and role.role_is_developer = 1 ";
+            $sql .= "and dev.user_developer_is_active = 1 ";
             $query = $this->connection->prepare($sql);
             $query->execute([
-                "user_developer_aid " => $this->user_developer_aid,
+                "user_developer_email" => $this->user_developer_email,
             ]);
         } catch (PDOException $ex) {
             $query = false;
@@ -242,7 +242,7 @@ class Developer
             $sql .= "and dev.user_developer_key = :user_developer_key ";
             $query = $this->connection->prepare($sql);
             $query->execute([
-                "user_developer_key " => $this->user_developer_key,
+                "user_developer_key" => $this->user_developer_key,
             ]);
         } catch (PDOException $ex) {
             $query = false;
@@ -339,9 +339,9 @@ class Developer
         try {
             $sql = "update {$this->tblDeveloper} set ";
             $sql .= "user_developer_password = :user_developer_password, ";
-            $sql .= "user_developer_key = '' ";
+            $sql .= "user_developer_key = '', ";
             $sql .= "user_developer_datetime = :user_developer_datetime ";
-            $sql .= "where user_developer_key    = :user_developer_key   ";
+            $sql .= "where user_developer_key = :user_developer_key ";
             $query = $this->connection->prepare($sql);
             $query->execute([
                 "user_developer_password" => $this->user_developer_password,

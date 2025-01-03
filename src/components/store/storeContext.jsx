@@ -13,6 +13,11 @@ const initVal = {
   isDelete: false,
   isAdd: false,
   isView: false,
+  isLogin: false,
+  isLogout: false,
+  isAccountUpdated: false,
+  credentials: {},
+  isCreatePassSuccess: false,
   isAnimating: true,
 };
 

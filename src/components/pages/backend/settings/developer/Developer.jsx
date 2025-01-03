@@ -62,7 +62,7 @@ const Developer = () => {
         </div>
       </section>
       {store.success && <ToastSuccess />}
-      {store.error && <ModalError />}
+      {/* {store.error && <ModalError />} */}
       {store.isAdd && (
         <ModalAddDeveloper itemEdit={itemEdit} developerRole={developerRole} />
       )}

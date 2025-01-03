@@ -16,6 +16,7 @@ import Role from "./components/pages/backend/settings/role/Role";
 import { routeAdmin } from "./routes/routesAdmin";
 import { routeDeveloper } from "./routes/routesDeveloper";
 import DeveloperCreatePassword from "./components/pages/backend/access/create-password/DeveloperCreatePassword";
+import DeveloperLogin from "./components/pages/backend/access/DeveloperLogin";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -47,6 +48,8 @@ const App = () => {
             <Route path="/admin/advertisement" element={<Advertisement />} />
             <Route path="/admin/food" element={<Food />} />
             <Route path="/admin/categories" element={<Categories />} /> */}
+
+            <Route path="/developer/login" element={<DeveloperLogin />} />
 
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/set-password" element={<SetPassword />} />

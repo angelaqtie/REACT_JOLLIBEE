@@ -13,7 +13,7 @@ export const devBaseUrl = `${urlJollibeeLocal}`;
 export const devKey =
   "$2a$12$47wDvbLInZif/PVS8B6P3.7WxyJvUpBzZAWCsnWJUKq3nrn4qgmeO";
 
-  // get the url id parameter
+// get the url id parameter
 export const getUrlParam = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -28,6 +28,12 @@ export const GetFocus = (id) => {
   }, []);
 };
 
+// storage after login
+export function setStorageRoute(jwt) {
+  localStorage.setItem("jollibeetoken", JSON.stringify({ token: jwt }));
+}
+
+//
 export const fetchFormData = (url, fd = {}) => {
   console.log(fd);
   const data = fetch(url, {
